@@ -1,9 +1,12 @@
 package com.blog.domain;
 
+import java.util.ArrayList;
+
 public class Blog {
     private int articleId;
     private String title;
     private String passage;
+    private ArrayList<Tag> tags;
 
     public int getArticleId() {
         return articleId;
@@ -27,5 +30,13 @@ public class Blog {
 
     public void setPassage(String passage) {
         this.passage = passage;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
     }
 }

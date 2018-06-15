@@ -14,6 +14,9 @@
 </head>
 <body>
 <h1>${sessionScope.blog.title}</h1>
+<c:forEach items="${sessionScope.blog.tags}" var="tag">
+<small>${tag.tagName}</small>
+</c:forEach>
 <h3>${sessionScope.blog.passage}</h3>
 
 <a href='${pageContext.request.contextPath}/create'>create</a>

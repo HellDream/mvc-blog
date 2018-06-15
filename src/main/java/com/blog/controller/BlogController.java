@@ -20,6 +20,7 @@ public class BlogController {
     public ModelAndView homepage(HttpServletRequest request){
         List<Blog> blogList = blogService.allBlog();
         request.getSession().setAttribute("blogList",blogList);
+        request.getSession().setAttribute("type","home");
         return new ModelAndView("home");
     }
 
@@ -49,6 +50,7 @@ public class BlogController {
         String keyword = request.getParameter("keyword");
         List<Blog> blogList = blogService.searchBlog(keyword);
         request.getSession().setAttribute("blogList",blogList);
+        request.getSession().setAttribute("type","search");
         return new ModelAndView("home");
     }
 

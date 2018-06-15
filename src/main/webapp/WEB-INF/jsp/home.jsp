@@ -21,7 +21,18 @@
         <a href="${pageContext.request.contextPath}/${blog.articleId}">
             <h1>${blog.title}</h1>
         </a>
-        <small>${blog.articleId}</small>
+        <<br>
+        <c:if test="${sessionScope.type!='tag'}">
+            <h3>
+                <c:forEach items="${blog.tags}" var="tag">
+                    <a href="${pageContext.request.contextPath}/tag/${tag.tagId}">
+                            ${tag.tagName}
+                    </a>
+                </c:forEach>
+            </h3>
+        </c:if>
+
+        <%--<small>${blog.articleId}</small>--%>
         <h4>${blog.passage}</h4>
     </c:forEach>
     <a href='${pageContext.request.contextPath}/create'>create</a>
