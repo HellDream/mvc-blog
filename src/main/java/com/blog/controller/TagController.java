@@ -23,6 +23,13 @@ public class TagController {
         return new ModelAndView("home");
     }
 
+    @RequestMapping(value = "/tag/create")
+    public ModelAndView createTag(HttpServletRequest request){
+        String tagName = request.getParameter("tagName");
+        tagService.createTag(tagName);
+        return new ModelAndView("redirect:/");
+    }
+
     @Autowired
     public void setTagService(TagService tagService) {
         this.tagService = tagService;
