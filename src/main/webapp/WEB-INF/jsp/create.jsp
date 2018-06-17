@@ -17,8 +17,12 @@
         <h1>标题：</h1>
         <input type="text" name="title">
         <h2>文章</h2>
-        <textarea name="passage"></textarea>
+        <textarea style="width: auto;height: auto" name="passage"></textarea>
         <br>
+        <c:forEach items="${sessionScope.tags}" var="tag">
+            <input type="checkbox" name="tag" value="${tag.tagName}">${tag.tagName}
+            <br>
+        </c:forEach>
         <input type="submit" value="发布">
     </form>
 </body>

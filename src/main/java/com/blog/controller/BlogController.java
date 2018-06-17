@@ -1,7 +1,9 @@
 package com.blog.controller;
 
 import com.blog.domain.Blog;
+import com.blog.domain.Tag;
 import com.blog.service.BlogService;
+import com.blog.service.TagService;
 import com.blog.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class BlogController {
     private BlogService blogService;
+    private TagService tagService;
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView homepage(HttpServletRequest request){
         List<Blog> blogList = blogService.allBlog();
@@ -37,6 +41,9 @@ public class BlogController {
 
     @RequestMapping(value = "/create")
     public ModelAndView createBlog(HttpServletRequest request){
+        List<Tag> tags = tagService.selectAllTag();
+        System.out.println(tags.get(0).getTagName());
+        request.getSession().setAttribute("tags",tags);
         System.out.println(request.getMethod());
         if(request.getMethod().equals("POST")){
             Blog blog = new Blog();
@@ -45,6 +52,12 @@ public class BlogController {
             Date date = new DateFormatter().formattedCurrentDate();
             blog.setPublishDate(date);
             blogService.addBlog(blog);
+            String[] tagNames = request.getParameterValues("tag");
+            for(String tagName:tagNames){
+                int tagId = tagService.selectTag(tagName);
+                int articleId = blogService.getLatestId();
+                blogService.addTag(articleId,tagId);
+            }
             return new ModelAndView("redirect:/");
         }
         return new ModelAndView("create");
@@ -63,5 +76,9 @@ public class BlogController {
     @Autowired
     public void setBlogService(BlogService blogService) {
         this.blogService = blogService;
+    }
+    @Autowired
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
     }
 }

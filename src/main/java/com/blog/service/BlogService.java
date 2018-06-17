@@ -32,6 +32,14 @@ public class BlogService {
     public Blog detailBlog(int articleId){
         return blogDao.detailBlog(articleId);
     }
+    @Transactional
+    public int getLatestId(){
+        return blogDao.getLatestId();
+    }
+    @Transactional
+    public void addTag(int articleId, int tagId){
+        blogDao.addTag(articleId,tagId);
+    }
     @Autowired
     public void setBlogDao(BlogDao blogDao) {
         this.blogDao = blogDao;

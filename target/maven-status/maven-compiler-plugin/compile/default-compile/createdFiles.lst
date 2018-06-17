@@ -1,6 +1,7 @@
 com\blog\utils\DateFormatter.class
 com\blog\dao\TagDao.class
 com\blog\dao\BlogDao.class
+com\blog\dao\TagDao$1.class
 com\blog\domain\Blog.class
 com\blog\service\TagService.class
 com\blog\dao\BlogDao$2.class
