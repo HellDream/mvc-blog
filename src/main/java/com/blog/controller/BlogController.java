@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import com.blog.domain.Blog;
 import com.blog.service.BlogService;
+import com.blog.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,6 +42,8 @@ public class BlogController {
             Blog blog = new Blog();
             blog.setTitle(request.getParameter("title"));
             blog.setPassage(request.getParameter("passage"));
+            Date date = new DateFormatter().formattedCurrentDate();
+            blog.setPublishDate(date);
             blogService.addBlog(blog);
             return new ModelAndView("redirect:/");
         }

@@ -1,13 +1,17 @@
 package com.blog.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Blog {
+
     private int articleId;
     private String title;
     private String passage;
-    private ArrayList<Tag> tags;
 
+    private Date publishDate;
+
+    private ArrayList<Tag> tags;
     public int getArticleId() {
         return articleId;
     }
@@ -30,6 +34,14 @@ public class Blog {
 
     public void setPassage(String passage) {
         this.passage = passage;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public ArrayList<Tag> getTags() {

@@ -16,14 +16,14 @@ import java.util.List;
 @Repository
 public class BlogDao {
     private final static String SELECT_ALL_SQL = " select * from t_article ";
-    private final static String ADD_ARTICLE_SQL = "insert into t_article(title,passage) values(?,?)";
+    private final static String ADD_ARTICLE_SQL = "insert into t_article(title,passage,publish_date) values(?,?,?)";
     private final static String SEARCH_SQL = "select * from t_article where title REGEXP ? or passage REGEXP ?";
     private final static String DETAIL_SQL = "select * from t_article where article_id = ?";
     private final static String ARTICLE_TAG_SQL = "select * from tag where tag_id in(select tag_id from blog_to_tag where article_id = ?)";
     private JdbcTemplate jdbcTemplate;
 
     public int addBlog(Blog blog){
-        return jdbcTemplate.update(ADD_ARTICLE_SQL, blog.getTitle(),blog.getPassage());
+        return jdbcTemplate.update(ADD_ARTICLE_SQL, blog.getTitle(),blog.getPassage(),blog.getPublishDate());
     }
 
     public List<Blog> allBlog(){
@@ -55,6 +55,7 @@ public class BlogDao {
                 blog.setArticleId(resultSet.getInt("article_id"));
                 blog.setTitle(resultSet.getString("title"));
                 blog.setPassage(resultSet.getString("passage"));
+                blog.setPublishDate(resultSet.getDate("publish_date"));
             }
         });
         final ArrayList<Tag> tags = new ArrayList<Tag>();
