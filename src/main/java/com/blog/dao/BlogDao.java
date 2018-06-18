@@ -85,5 +85,4 @@ public class BlogDao {
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
-
 }
