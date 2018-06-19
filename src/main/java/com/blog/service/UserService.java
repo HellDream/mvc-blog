@@ -1,6 +1,7 @@
 package com.blog.service;
 
 import com.blog.dao.UserDao;
+import com.blog.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +25,8 @@ public class UserService {
     }
 
     @Transactional
-    public void loginUser(String username,String password){
-        userDao.loginUser(username,password);
+    public User loginUser(String username, String password){
+        return userDao.loginUser(username,password);
     }
 
     @Autowired
