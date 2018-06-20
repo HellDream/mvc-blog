@@ -26,6 +26,9 @@ public class BlogController {
     private TagService tagService;
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView homepage(HttpServletRequest request){
+        if(request.getSession().getAttribute("user_id")==null){
+            return new ModelAndView("redirect:/login");
+        }
         List<Blog> blogList = blogService.allBlog();
         request.getSession().setAttribute("blogList",blogList);
         request.getSession().setAttribute("type","home");

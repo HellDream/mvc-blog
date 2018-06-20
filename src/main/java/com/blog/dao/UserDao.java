@@ -14,11 +14,11 @@ import java.sql.SQLException;
 public class UserDao {
     private JdbcTemplate jdbcTemplate;
     private static String FIND_MATCH_COUNT_SQL = "select count(*) from t_user where username=?";
-    private static String LOGIN_SQL = "select * from t_user where username=? and password=DECODE(?,'abce')";
+    private static String LOGIN_SQL = "select * from t_user where username=? and password=?";
     private static String CHECK_PASSWORD_SQL = "select password from t_user where username=?";
     private static String UPDATE_LOGIN_DATE_SQL = "update t_user set last_visit=? where user_id = ?";
     public void signUpUser(String username, String password){
-        String SIGN_UP_SQL = "insert into t_user(username,password) values(?,ENCODE(?,'abcd'))";
+        String SIGN_UP_SQL = "insert into t_user(username,password) values(?,?)";
         jdbcTemplate.update(SIGN_UP_SQL,username,password);
     }
 

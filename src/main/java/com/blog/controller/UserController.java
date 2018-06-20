@@ -15,34 +15,43 @@ public class UserController {
 
     @RequestMapping(value = "/register")
     public ModelAndView register(HttpServletRequest request){
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String password_confirm = request.getParameter("confirm");
-        if(!password.equals(password_confirm)){
-            request.getSession().setAttribute("Error", "The password is not the same");
-            return new ModelAndView("error");
+        request.getSession().setAttribute("type","register");
+        if(request.getMethod().equals("POST")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String password_confirm = request.getParameter("confirm");
+            if(!password.equals(password_confirm)){
+                request.getSession().setAttribute("Error", "The password is not the same");
+                return new ModelAndView("error");
+            }
+            if(userService.findMatchUser(username)>0){
+                request.getSession().setAttribute("Error", "The password has been register");
+                return new ModelAndView("error");
+            }
+            userService.signUpUser(username,password);
+            User user = userService.loginUser(username,password);
+            request.getSession().setAttribute("user_id", user.getUserId());
+            return new ModelAndView("redirect:/");
         }
-        if(userService.findMatchUser(username)>0){
-            request.getSession().setAttribute("Error", "The password has been register");
-            return new ModelAndView("error");
-        }
-        userService.signUpUser(username,password);
-        User user = userService.loginUser(username,password);
-        request.getSession().setAttribute("user_id", user.getUserId());
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("form");
+
     }
 
     @RequestMapping(value = "/login")
     public ModelAndView login(HttpServletRequest request){
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        if(!userService.checkUserPassword(username, password)){
-            request.getSession().setAttribute("Error", "Incorrect password");
-            return new ModelAndView("error");
+        request.getSession().setAttribute("type","login");
+        if(request.getMethod().equals("POST")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            if(!userService.checkUserPassword(username, password)){
+                request.getSession().setAttribute("Error", "Incorrect password");
+                return new ModelAndView("error");
+            }
+            User user = userService.loginUser(username,password);
+            request.getSession().setAttribute("user_id", user.getUserId());
+            return new ModelAndView("redirect:/");
         }
-        User user = userService.loginUser(username,password);
-        request.getSession().setAttribute("user_id", user.getUserId());
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("form");
     }
 
     @Autowired
