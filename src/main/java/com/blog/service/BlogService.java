@@ -19,8 +19,8 @@ public class BlogService {
     }
 
     @Transactional
-    public List<Blog> allBlog(){
-        return blogDao.allBlog();
+    public List<Blog> allBlog(int userId){
+        return blogDao.allBlog(userId);
     }
 
     @Transactional
@@ -28,6 +28,10 @@ public class BlogService {
         return blogDao.searchBlog(keyword);
     }
 
+    @Transactional
+    public void addUserArticle(int userId, int articleId) {
+        blogDao.addUserArticle(userId,articleId);
+    }
     @Transactional
     public Blog detailBlog(int articleId){
         return blogDao.detailBlog(articleId);

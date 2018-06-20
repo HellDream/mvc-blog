@@ -29,7 +29,8 @@ public class BlogController {
         if(request.getSession().getAttribute("user_id")==null){
             return new ModelAndView("redirect:/login");
         }
-        List<Blog> blogList = blogService.allBlog();
+        int userId = (Integer) request.getSession().getAttribute("user_id");
+        List<Blog> blogList = blogService.allBlog(userId);
         request.getSession().setAttribute("blogList",blogList);
         request.getSession().setAttribute("type","home");
         return new ModelAndView("home");
@@ -44,9 +45,13 @@ public class BlogController {
 
     @RequestMapping(value = "/create")
     public ModelAndView createBlog(HttpServletRequest request){
+        if(request.getSession().getAttribute("user_id")==null){
+            return new ModelAndView("redirect:/login");
+        }
         List<Tag> tags = tagService.selectAllTag();
         System.out.println(tags.get(0).getTagName());
         request.getSession().setAttribute("tags",tags);
+        int userId = (Integer) request.getSession().getAttribute("user_id");
         System.out.println(request.getMethod());
         if(request.getMethod().equals("POST")){
             Blog blog = new Blog();
@@ -56,11 +61,12 @@ public class BlogController {
             blog.setPublishDate(date);
             blogService.addBlog(blog);
             String[] tagNames = request.getParameterValues("tag");
+            int articleId = blogService.getLatestId();
             for(String tagName:tagNames){
                 int tagId = tagService.selectTag(tagName);
-                int articleId = blogService.getLatestId();
                 blogService.addTag(articleId,tagId);
             }
+            blogService.addUserArticle(userId, articleId);
             return new ModelAndView("redirect:/");
         }
         return new ModelAndView("create");
