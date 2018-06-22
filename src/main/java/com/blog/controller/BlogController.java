@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,17 +23,25 @@ public class BlogController {
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView homepage(HttpServletRequest request){
         if(request.getSession().getAttribute("user_id")==null){
-            return new ModelAndView("redirect:/login");
+            return checkLoginView(request);
         }
-        int userId = (Integer) request.getSession().getAttribute("user_id");
-        List<Blog> blogList = blogService.allBlog(userId);
+        List<Blog> blogList = blogService.allBlog();
         request.getSession().setAttribute("blogList",blogList);
         request.getSession().setAttribute("type","home");
         return new ModelAndView("home");
     }
 
+
+    private ModelAndView checkLoginView(HttpServletRequest request){
+        request.getSession().setAttribute("previousPage", request.getRequestURI());
+        return new ModelAndView("redirect:/login");
+    }
+
     @RequestMapping(value = "/{articleId}")
     public ModelAndView detail(@PathVariable int articleId, HttpServletRequest request){
+        if(request.getSession().getAttribute("user_id")==null){
+            return checkLoginView(request);
+        }
         Blog blog = blogService.detailBlog(articleId);
         request.getSession().setAttribute("blog",blog);
         return new ModelAndView("detail");
@@ -46,7 +50,7 @@ public class BlogController {
     @RequestMapping(value = "/create")
     public ModelAndView createBlog(HttpServletRequest request){
         if(request.getSession().getAttribute("user_id")==null){
-            return new ModelAndView("redirect:/login");
+            return checkLoginView(request);
         }
         List<Tag> tags = tagService.selectAllTag();
         System.out.println(tags.get(0).getTagName());
@@ -62,9 +66,11 @@ public class BlogController {
             blogService.addBlog(blog);
             String[] tagNames = request.getParameterValues("tag");
             int articleId = blogService.getLatestId();
-            for(String tagName:tagNames){
-                int tagId = tagService.selectTag(tagName);
-                blogService.addTag(articleId,tagId);
+            if(tagNames!=null&&tagNames.length>0){
+                for(String tagName:tagNames){
+                    int tagId = tagService.selectTag(tagName);
+                    blogService.addTag(articleId,tagId);
+                }
             }
             blogService.addUserArticle(userId, articleId);
             return new ModelAndView("redirect:/");
@@ -79,6 +85,18 @@ public class BlogController {
         List<Blog> blogList = blogService.searchBlog(keyword);
         request.getSession().setAttribute("blogList",blogList);
         request.getSession().setAttribute("type","search");
+        return new ModelAndView("home");
+    }
+
+    @RequestMapping(value = "/my")
+    public ModelAndView myBlog(HttpServletRequest request){
+        if(request.getSession().getAttribute("user_id")==null){
+            return checkLoginView(request);
+        }
+        int userId = (Integer) request.getSession().getAttribute("user_id");
+        List<Blog> blogList = blogService.allBlog(userId);
+        request.getSession().setAttribute("blogList",blogList);
+        request.getSession().setAttribute("type","my-blog");
         return new ModelAndView("home");
     }
 
