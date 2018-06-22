@@ -49,10 +49,16 @@ public class UserController {
             }
             User user = userService.loginUser(username,password);
             request.getSession().setAttribute("user_id", user.getUserId());
-            return new ModelAndView("redirect:/");
+            Object previousPage = request.getSession().getAttribute("previousPage");
+            System.out.println(request.getSession().getAttribute("previousPage"));
+            if(previousPage==null)
+                return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:"+previousPage.toString());
         }
         return new ModelAndView("form");
     }
+
+
 
     @Autowired
     public void setUserService(UserService userService) {
