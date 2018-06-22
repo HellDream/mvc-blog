@@ -22,6 +22,10 @@ public class BlogService {
     public List<Blog> allBlog(int userId){
         return blogDao.allBlog(userId);
     }
+    @Transactional
+    public List<Blog> allBlog(){
+        return blogDao.allBlog();
+    }
 
     @Transactional
     public List<Blog> searchBlog(String keyword){
