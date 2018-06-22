@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public class BlogDao {
-    private final static String SELECT_ALL_SQL = " select * from t_article where article_id in (select article_id from t_user_article where user_id=?)";
+    private final static String SELECT_ALL_SQL_USER = " select * from t_article where article_id in (select article_id from t_user_article where user_id=?)";
     private final static String ADD_ARTICLE_SQL = "insert into t_article(title,passage,publish_date) values(?,?,?)";
     private final static String SEARCH_SQL = "select * from t_article where title REGEXP ? or passage REGEXP ?";
     private final static String DETAIL_SQL = "select * from t_article where article_id = ?";
@@ -23,6 +23,7 @@ public class BlogDao {
     private final static String ADD_TAG_SQL = "insert into blog_to_tag(article_id,tag_id) values(?,?)";
     private final static String TOTAL_ARTICLE_SQL = "select count(*) from t_article";
     private final static String USER_ARTICLE_SQL = "insert into t_user_article(user_id,article_id) values(?,?)";
+    private final static String SELECT_ALL_SQL = "select * from t_article";
     private JdbcTemplate jdbcTemplate;
 
     public int addBlog(Blog blog){
@@ -42,8 +43,18 @@ public class BlogDao {
     }
 
     public List<Blog> allBlog(int userId){
-        List<Blog> blogList = jdbcTemplate.query(SELECT_ALL_SQL,new Object[]{userId},
+        List<Blog> blogList = jdbcTemplate.query(SELECT_ALL_SQL_USER,new Object[]{userId},
                 new BeanPropertyRowMapper<Blog>(Blog.class));
+        return setBlogTags(blogList);
+
+    }
+    public List<Blog> allBlog(){
+        List<Blog> blogList = jdbcTemplate.query(SELECT_ALL_SQL,
+                new BeanPropertyRowMapper<Blog>(Blog.class));
+        return setBlogTags(blogList);
+    }
+
+    private List<Blog> setBlogTags(List<Blog> blogList){
         for(Blog blog:blogList){
             final ArrayList<Tag> tags = new ArrayList<Tag>();
             jdbcTemplate.query(ARTICLE_TAG_SQL, new Object[]{blog.getArticleId()}, new RowCallbackHandler() {
