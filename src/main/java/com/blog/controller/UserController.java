@@ -18,6 +18,10 @@ public class UserController {
         request.getSession().setAttribute("type","register");
         if(request.getMethod().equals("POST")) {
             String username = request.getParameter("username");
+            if(username.length()<4){
+                request.getSession().setAttribute("Error", "The username is shorter than 4 digits");
+                return new ModelAndView("error");
+            }
             String password = request.getParameter("password");
             String password_confirm = request.getParameter("confirm");
             if(!password.equals(password_confirm)){
