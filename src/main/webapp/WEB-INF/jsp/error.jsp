@@ -11,6 +11,7 @@
     <title>Error</title>
 </head>
 <body>
+<h1>${sessionScope.Error}</h1>
 
 </body>
 </html>
