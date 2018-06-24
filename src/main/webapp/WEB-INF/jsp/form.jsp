@@ -10,29 +10,58 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>${sessionScope.type}</title>
 </head>
 <body>
 <c:if test="${sessionScope.type=='login'}">
     <form action="<c:url value="login"/>" method="post">
-        <h1>username：</h1>
-        <input type="text" name="username">
-        <h2>password</h2>
-        <input type="password" name="password">
-        <br>
-        <input type="submit" value="登录">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="Username">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </div>
     </form>
 </c:if>
 <c:if test="${sessionScope.type=='register'}">
     <form action="<c:url value="register"/>" method="post">
-        <h1>username：</h1>
-        <input type="text" name="username">
-        <h1>password</h1>
-        <input type="password" name="password">
-        <h1>confirm password</h1>
-        <input type="password" name="confirm">
-        <br>
-        <input type="submit" value="注册">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                <input type="text" name="username" class="form-control" placeholder="Username">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="password" class="form-control" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="confirm" class="form-control" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </div>
+        </div>
     </form>
 </c:if>
 
