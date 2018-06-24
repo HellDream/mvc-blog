@@ -55,23 +55,26 @@ public class BlogController {
         List<Tag> tags = tagService.selectAllTag();
         System.out.println(tags.get(0).getTagName());
         request.getSession().setAttribute("tags",tags);
+        System.out.println(request.getSession().getAttribute("user_id"));
         int userId = (Integer) request.getSession().getAttribute("user_id");
         System.out.println(request.getMethod());
         if(request.getMethod().equals("POST")){
             Blog blog = new Blog();
             blog.setTitle(request.getParameter("title"));
-            blog.setPassage(request.getParameter("passage"));
+            blog.setPassage(request.getParameter("my-editormd-markdown-doc"));
             Date date = new DateFormatter().formattedCurrentDate();
             blog.setPublishDate(date);
             blogService.addBlog(blog);
             String[] tagNames = request.getParameterValues("tag");
             int articleId = blogService.getLatestId();
+            System.out.println(articleId);
             if(tagNames!=null&&tagNames.length>0){
                 for(String tagName:tagNames){
                     int tagId = tagService.selectTag(tagName);
                     blogService.addTag(articleId,tagId);
                 }
             }
+            System.out.println("userId:"+userId);
             blogService.addUserArticle(userId, articleId);
             return new ModelAndView("redirect:/");
         }

@@ -21,7 +21,7 @@ public class BlogDao {
     private final static String DETAIL_SQL = "select * from t_article where article_id = ?";
     private final static String ARTICLE_TAG_SQL = "select * from tag where tag_id in(select tag_id from blog_to_tag where article_id = ?)";
     private final static String ADD_TAG_SQL = "insert into blog_to_tag(article_id,tag_id) values(?,?)";
-    private final static String TOTAL_ARTICLE_SQL = "select count(*) from t_article";
+    private final static String LATEST_ARTICLE_SQL = "select max(article_id) from t_article";
     private final static String USER_ARTICLE_SQL = "insert into t_user_article(user_id,article_id) values(?,?)";
     private final static String SELECT_ALL_SQL = "select * from t_article";
     private JdbcTemplate jdbcTemplate;
@@ -35,7 +35,7 @@ public class BlogDao {
     }
 
     public int getLatestId(){
-        return jdbcTemplate.queryForObject(TOTAL_ARTICLE_SQL,Integer.class);
+        return jdbcTemplate.queryForObject(LATEST_ARTICLE_SQL,Integer.class);
     }
 
     public void addTag(int articleId, int tagId){

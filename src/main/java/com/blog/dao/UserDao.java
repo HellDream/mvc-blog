@@ -31,6 +31,7 @@ public class UserDao {
 
     public User loginUser(final String username, String password){
         final User user = new User();
+        password = new Encoder(username).encrypt(password);
         jdbcTemplate.query(LOGIN_SQL, new Object[]{username, password}, new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
                 user.setUserId(resultSet.getInt("user_id"));
@@ -40,6 +41,7 @@ public class UserDao {
                 user.setPassword(pwd);
             }
         });
+        System.out.println("loginUser: "+user.getUserId());
         user.setLastVisit(new DateFormatter().formattedCurrentDate());
         jdbcTemplate.update(UPDATE_LOGIN_DATE_SQL, user.getLastVisit(),user.getUserId());
         return user;

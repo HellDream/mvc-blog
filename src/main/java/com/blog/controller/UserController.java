@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import com.blog.domain.User;
 import com.blog.service.UserService;
+import com.blog.utils.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,7 @@ public class UserController {
             userService.signUpUser(username,password);
             User user = userService.loginUser(username,password);
             request.getSession().setAttribute("user_id", user.getUserId());
+            request.getSession().setAttribute("username", user.getUsername());
             return new ModelAndView("redirect:/");
         }
         return new ModelAndView("form");
@@ -53,6 +55,7 @@ public class UserController {
             }
             User user = userService.loginUser(username,password);
             request.getSession().setAttribute("user_id", user.getUserId());
+            request.getSession().setAttribute("username", user.getUsername());
             Object previousPage = request.getSession().getAttribute("previousPage");
             System.out.println(request.getSession().getAttribute("previousPage"));
             if(previousPage==null)
