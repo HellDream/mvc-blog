@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -66,7 +66,7 @@ public class BlogController {
             blog.setPublishDate(date);
             blogService.addBlog(blog);
             String[] tagNames = request.getParameterValues("tag");
-            int articleId = blogService.getLatestId();
+            int articleId = blog.getArticleId();
             System.out.println(articleId);
             if(tagNames!=null&&tagNames.length>0){
                 for(String tagName:tagNames){

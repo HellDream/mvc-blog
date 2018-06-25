@@ -5,11 +5,13 @@ import com.blog.domain.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +28,19 @@ public class BlogDao {
     private final static String SELECT_ALL_SQL = "select * from t_article";
     private JdbcTemplate jdbcTemplate;
 
-    public int addBlog(Blog blog){
-        return jdbcTemplate.update(ADD_ARTICLE_SQL, blog.getTitle(),blog.getPassage(),blog.getPublishDate());
+    public void addBlog(final Blog blog){
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(ADD_ARTICLE_SQL, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1,blog.getTitle());
+                ps.setString(2,blog.getPassage());
+                ps.setDate(3, blog.getPublishDate());
+                return ps;
+            }
+        },keyHolder);
+        blog.setArticleId(keyHolder.getKey().intValue());
+//        return jdbcTemplate.update(ADD_ARTICLE_SQL, blog.getTitle(),blog.getPassage(),blog.getPublishDate());
     }
 
     public void addUserArticle(int userId, int articleId){

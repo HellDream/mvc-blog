@@ -16,4 +16,5 @@ com\blog\dao\BlogDao$3.class
 com\blog\dao\BlogDao$1.class
 com\blog\controller\BlogController.class
 com\blog\service\UserService.class
+com\blog\dao\BlogDao$4.class
 com\blog\service\BlogService.class

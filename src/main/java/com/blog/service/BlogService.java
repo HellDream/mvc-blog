@@ -14,8 +14,8 @@ public class BlogService {
 
     @Transactional
     public void addBlog(Blog blog){
-        int a = blogDao.addBlog(blog);
-        System.out.println(a);
+        blogDao.addBlog(blog);
+//        System.out.println(a);
     }
 
     @Transactional
